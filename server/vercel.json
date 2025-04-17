@@ -6,14 +6,15 @@
         "use": "@vercel/static-build",
         "config": {
           "distDir": "build",
-          "installCommand": "npm install --legacy-peer-deps"
+          "installCommand": "npm install --legacy-peer-deps --prefer-offline --no-audit"
         }
       },
       {
         "src": "server.js",
         "use": "@vercel/node",
         "config": {
-          "installCommand": "npm install --legacy-peer-deps"
+          "installCommand": "npm install --legacy-peer-deps --prefer-offline --no-audit",
+          "includeFiles": ["src/**", "config/**", "models/**", "middlewares/**"]
         }
       }
     ],
