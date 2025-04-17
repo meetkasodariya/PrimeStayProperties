@@ -4,21 +4,17 @@
       {
         "src": "package.json",
         "use": "@vercel/static-build",
-        "config": { "distDir": "build" }
+        "config": {
+          "distDir": "build",
+          "installCommand": "npm install --legacy-peer-deps"
+        }
       },
       {
         "src": "server.js",
-        "use": "@vercel/node"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/api/(.*)",
-        "dest": "/server.js"
-      },
-      {
-        "src": "/(.*)",
-        "dest": "/"
+        "use": "@vercel/node",
+        "config": {
+          "installCommand": "npm install --legacy-peer-deps"
+        }
       }
     ]
   }
