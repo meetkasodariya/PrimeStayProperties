@@ -168,7 +168,6 @@ const Home = ({ searchQuery = "" }) => {
     const fetchListings = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/listings");
-        // Ensure images are in the correct format (array of URLs)
         const formattedListings = response.data.map(listing => ({
           ...listing,
           images: Array.isArray(listing.images) 
@@ -206,6 +205,7 @@ const Home = ({ searchQuery = "" }) => {
   // ImageSlider component for each listing
   const ImageSlider = ({ images, loading }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [isHovered, setIsHovered] = useState(false);
 
     const nextImage = () => {
       setCurrentImageIndex((prevIndex) => 
@@ -233,12 +233,18 @@ const Home = ({ searchQuery = "" }) => {
       );
     }
 
-    // Ensure we have at least one image URL
     const imageUrls = images.length > 0 ? images : [fallbackImage];
     const currentImage = imageUrls[currentImageIndex] || fallbackImage;
 
     return (
-      <Box sx={{ position: 'relative', height: 240 }}>
+      <Box 
+        sx={{ 
+          position: 'relative', 
+          height: 240,
+        }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <CardMedia
           component="img"
           image={currentImage}
@@ -255,7 +261,7 @@ const Home = ({ searchQuery = "" }) => {
           }}
         />
         
-        {imageUrls.length > 1 && (
+        {imageUrls.length > 1 && isHovered && (
           <>
             <IconButton
               onClick={(e) => {
@@ -269,6 +275,7 @@ const Home = ({ searchQuery = "" }) => {
                 transform: 'translateY(-50%)',
                 color: 'white',
                 backgroundColor: 'rgba(0,0,0,0.5)',
+                transition: 'opacity 0.3s ease',
                 '&:hover': {
                   backgroundColor: 'rgba(0,0,0,0.7)',
                 }
@@ -289,6 +296,7 @@ const Home = ({ searchQuery = "" }) => {
                 transform: 'translateY(-50%)',
                 color: 'white',
                 backgroundColor: 'rgba(0,0,0,0.5)',
+                transition: 'opacity 0.3s ease',
                 '&:hover': {
                   backgroundColor: 'rgba(0,0,0,0.7)',
                 }
@@ -315,7 +323,8 @@ const Home = ({ searchQuery = "" }) => {
                     height: 8,
                     borderRadius: '50%',
                     backgroundColor: index === currentImageIndex ? 'primary.main' : 'rgba(255,255,255,0.5)',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    transition: 'background-color 0.3s ease'
                   }}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -330,7 +339,6 @@ const Home = ({ searchQuery = "" }) => {
     );
   };
 
-  // Loading skeleton for cards
   const LoadingSkeleton = () => {
     return (
       <Grid container spacing={4} justifyContent="flex-start">
@@ -384,7 +392,6 @@ const Home = ({ searchQuery = "" }) => {
         py: 4,
       }}
     >
-      {/* Semi-transparent overlay */}
       <Box
         sx={{
           position: "absolute",
